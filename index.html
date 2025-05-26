@@ -174,94 +174,24 @@
                 }
               }"
               >
-                <h1 class="text-3xl font-bold  pb-6">Page: Register</h1>
-                <div class="grid bg-blue-50 p-6">
-                    <h2 
-                    class="text-2xl font-bold pb-8  justify-self-center"
-                    >
-                    Section: Form Register
-                    <span 
-                       class="text-red-400"
-                       x-text="message"
-                    ></span>
-                 </h2>
+                <h1 class="text-3xl font-bold  pb-6">Page: Registr</h1>
+                <div>
+                  <img src="" alt="">
                   <form 
                     enctype="multipart/form-data"
                     x-ref="register"
                     x-on:submit.prevent="register()"
-                    class="grid gap-y-4 w-2/3 justify-self-center"
+                    class=""
                     >
-                    <div 
-                          class="grid grid-cols-[1fr_2fr]"
-                        >
-                            <label 
-                              for="email" 
-                              class="font-bold"
-                            >
-                              Email
-                            </label>
-                            <input 
-                              type="text" 
-                              id="email" 
-                              name="email"
-                              placeholder="min 6, max 12 sumbols" 
-                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
-                            >
-                            <template x-for="error in errors.email">
-                              <span 
-                                class="text-red-400 text-sm col-[2/3]"
-                                x-text="error">
-                            </template>
-                            </span>
-                        </div>
-                        <div 
-                          class="grid grid-cols-[1fr_2fr]"
-                        >
-                           <label 
-                              for="password" 
-                              class="font-bold"
-                           >
-                              Password
-                           </label>
-                           <input 
-                              type="text" 
-                              id="password" 
-                              name="password"
-                              placeholder="min 6, max 12 sumbols" 
-                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
-                           >
-                           <template x-for="error in errors.password">
-                            <span 
-                              class="text-red-400 text-sm col-[2/3]"
-                              x-text="error">
-                            </span>
-                           </template>
-                        </div>
-                        <div 
-                        class="grid grid-cols-[1fr_2fr]"
-                      >
-                         <label 
-                            for="name" 
-                            class="font-bold"
-                         >
-                            Name
-                         </label>
-                         <input 
-                            type="text" 
-                            id="name" 
-                            name="name"
-                            placeholder="min 6, max 12 sumbols" 
-                            class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
-                         >
-                         <template x-for="error in errors.password">
-                          <span 
-                            class="text-red-400 text-sm col-[2/3]"
-                            x-text="error">
-                          </span>
-                         </template>
-                      </div>
-                    <input type="file" name="avatar" class="bg-blue-600 text-white hover:scale-102 transition duration-700 p-2 rounded-xs">
-                    <button type="submit" class="bg-blue-600 text-white hover:scale-102 transition duration-700 py-2 rounded-xs">Register</button>
+                    <div class="grid grid-cols-1">
+                      <input type="email" name="email" class="border">
+                      <span class="text-sm text-red-400">Errors</span>
+                    </div>
+                    
+                    <input type="password" name="password" class="border">
+                    <input type="text" name="name" class="border">
+                    <input type="file" name="avatar">
+                    <button type="submit" class="border">Register</button>
 
                   </form>
                 </div>
@@ -299,12 +229,13 @@
                         <li
                             class="grid grid-cols-[1fr_3fr] gap-x-10 items-center">
                               <h3 class="text-xl font-bold justify-self-end"
-                              >token</h3>
+                              >Token</h3>
                               <span x-text="token"></span>
                            </li>
                      </ul>
                   </div>
                   
+                     
                   </p>
                 </div>
             </section>
