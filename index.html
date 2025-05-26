@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/alpine.js" defer></script>
+    <script src="js/tailwindcss.js"></script>
+    
+</head>
+<body>
+    <div 
+        x-data="{
+            visible: { isHome: false, isRegister: true, isLogin: false, isExit: false, isUser: false},
+            user: '',
+            token: '',
+            host: 'https://test.informat74.ru/api',
+             
+            visibleFunction(param){
+               for(item in this.visible){
+                  this.visible[item] = false
+               }
+               this.visible[param] = true
+            }   
+        }"
+    >
+        <header class="grid grid-cols-[1fr_3fr_1fr] justify-items-start bg-blue-600 text-white py-2 md:px-[10%] px-[1%]">
+            <a href="" class="block hover:scale-110 transition duration-700 ease-in-out"
+            x-on:click.prevent="visibleFunction('isHome')"
+            >Home</a>
+            <nav>
+                <ul class="flex gap-x-4">
+                    <li><a href="" class="block hover:scale-110 transition duration-700 ease-in-out"
+                        x-show="visible.isUser"
+                        >AdminPanel</a></li>
+                    <li><a href="" class="block hover:scale-110 transition duration-700 ease-in-out">Item2</a></li>
+                    <li><a href="" class="block hover:scale-110 transition duration-700 ease-in-out">Item3</a></li>
+                </ul>
+            </nav>
+            <ul  class="flex gap-x-4 justify-self-end">
+                    <template x-if="!visible.isUser">
+                        <li>
+                            <a href=""class="block hover:scale-110 transition duration-700 ease-in-out" 
+                            x-on:click.prevent="visibleFunction('isRegister')"    
+                            >Register</a>
+                        </li>
+                    </template>
+                    <template x-if="!visible.isUser">
+                        <li>
+                            <a href="" class="block hover:scale-110 transition duration-700 ease-in-out"
+                                x-on:click.prevent="visibleFunction('isLogin')"
+                            >Login</a>
+                        </li>
+                    </template>
+                    <template x-if="visible.isUser">
+                        <li 
+                            x-show="visible.isExit"
+                        >
+                            <a href="" class="block hover:scale-110 transition duration-700 ease-in-out">Exit</a>
+                        </li>
+                    </template>
+                    
+            </ul>
+        </header>
+        <main class="md:px-[10%] px-[1%] py-10 h-[90vh]">
+            <section 
+              x-show="visible.isLogin"
+              x-data="{
+                  message: '',
+                  errors: {},
+                  async loginFunction(){
+                    
+                     let response = await fetch(`${this.host}/login`,{
+                        method: 'POST',
+                        body: new FormData($refs.register),
+                        })
+                        response = await response.json()
+                     
+                     if(!response.error){
+                        console.log(response )
+                        this.token = response.token
+                        this.user = response.user
+                        this.visibleFunction('isExit')
+                        this.visible.isUser = true;
+                     }else{
+                        console.log(response)
+                        this.message = response.message
+                        this.errors = response.errors
+                     }
+                  }
+              }"
+            >
+                <h1 class="text-3xl font-bold  pb-6">Page: Login</h1>
+                <div class="grid bg-blue-50 p-6">
+                    <h2 
+                     class="text-2xl font-bold pb-8  justify-self-center"
+                     >
+                     Section: Form Login
+                     <span 
+                        class="text-red-400"
+                        x-text="message"
+                     ></span>
+                  </h2>
+                    <form 
+                      class="grid gap-y-4 w-2/3 justify-self-center"
+                      x-on:submit.prevent="loginFunction()"
+                      x-ref="register"
+                    >
+                        <div 
+                          class="grid grid-cols-[1fr_2fr]"
+                        >
+                            <label 
+                              for="email" 
+                              class="font-bold"
+                            >
+                              Email
+                            </label>
+                            <input 
+                              type="text" 
+                              id="email" 
+                              name="email"
+                              placeholder="min 6, max 12 sumbols" 
+                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
+                            >
+                            <template x-for="error in errors.email">
+                              <span 
+                                class="text-red-400 text-sm col-[2/3]"
+                                x-text="error">
+                            </template>
+                            
+                            </span>
+                        </div>
+                        <div 
+                          class="grid grid-cols-[1fr_2fr]"
+                        >
+                           <label 
+                              for="password" 
+                              class="font-bold"
+                           >
+                              Password
+                           </label>
+                           <input 
+                              type="text" 
+                              id="password" 
+                              name="password"
+                              placeholder="min 6, max 12 sumbols" 
+                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
+                           >
+                           <template x-for="error in errors.password">
+                            <span 
+                              class="text-red-400 text-sm col-[2/3]"
+                              x-text="error">
+                            </span>
+                           </template>
+                           
+                        </div>
+                        <button 
+                          class="bg-blue-600 text-white hover:scale-102 transition duration-700 py-2 rounded-xs "
+                        >
+                          Send
+                        </button>
+                    </form>
+                </div>
+            </section>
+            <section 
+              x-show="visible.isRegister"
+              x-data="{
+                async register(){
+                  let response = await fetch(`${host}/register`, {
+                    method: 'POST',
+                    body: new FormData($refs.register)
+                  })
+                  console.log(await response.json())
+                }
+              }"
+              >
+                <h1 class="text-3xl font-bold  pb-6">Page: Register</h1>
+                <div class="grid bg-blue-50 p-6">
+                    <h2 
+                    class="text-2xl font-bold pb-8  justify-self-center"
+                    >
+                    Section: Form Register
+                    <span 
+                       class="text-red-400"
+                       x-text="message"
+                    ></span>
+                 </h2>
+                  <form 
+                    enctype="multipart/form-data"
+                    x-ref="register"
+                    x-on:submit.prevent="register()"
+                    class="grid gap-y-4 w-2/3 justify-self-center"
+                    >
+                    <div 
+                          class="grid grid-cols-[1fr_2fr]"
+                        >
+                            <label 
+                              for="email" 
+                              class="font-bold"
+                            >
+                              Email
+                            </label>
+                            <input 
+                              type="text" 
+                              id="email" 
+                              name="email"
+                              placeholder="min 6, max 12 sumbols" 
+                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
+                            >
+                            <template x-for="error in errors.email">
+                              <span 
+                                class="text-red-400 text-sm col-[2/3]"
+                                x-text="error">
+                            </template>
+                            </span>
+                        </div>
+                        <div 
+                          class="grid grid-cols-[1fr_2fr]"
+                        >
+                           <label 
+                              for="password" 
+                              class="font-bold"
+                           >
+                              Password
+                           </label>
+                           <input 
+                              type="text" 
+                              id="password" 
+                              name="password"
+                              placeholder="min 6, max 12 sumbols" 
+                              class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
+                           >
+                           <template x-for="error in errors.password">
+                            <span 
+                              class="text-red-400 text-sm col-[2/3]"
+                              x-text="error">
+                            </span>
+                           </template>
+                        </div>
+                        <div 
+                        class="grid grid-cols-[1fr_2fr]"
+                      >
+                         <label 
+                            for="name" 
+                            class="font-bold"
+                         >
+                            Name
+                         </label>
+                         <input 
+                            type="text" 
+                            id="name" 
+                            name="name"
+                            placeholder="min 6, max 12 sumbols" 
+                            class="border border-gray-300 bg-gray-50 p-1 rounded-xs "
+                         >
+                         <template x-for="error in errors.password">
+                          <span 
+                            class="text-red-400 text-sm col-[2/3]"
+                            x-text="error">
+                          </span>
+                         </template>
+                      </div>
+                    <input type="file" name="avatar" class="bg-blue-600 text-white hover:scale-102 transition duration-700 p-2 rounded-xs">
+                    <button type="submit" class="bg-blue-600 text-white hover:scale-102 transition duration-700 py-2 rounded-xs">Register</button>
+
+                  </form>
+                </div>
+                
+            </section>
+            <section x-show="visible.isHome">
+                <h1 class="text-3xl font-bold  pb-6">Page: Home</h1>
+            </section>
+            <section x-show="visible.isUser">
+                <h1 class="text-3xl font-bold  pb-6">Page: Admin Panel</h1>
+                <div>
+                  <h2 
+                     class="text-2xl font-bold"
+                  >Card User</h2>
+                  <div 
+                     class="grid grid-cols-1 md:grid-cols-[1fr_2fr] grid-rows-[300px] items-center border rounded-xs p-2"
+                  >
+                     <img 
+                        class="object-contain h-full w-full"
+                        x-bind:src="user.avatar" 
+                        alt="">
+                     <ul>
+                        <template
+                           x-for="(item, key) in user"
+                        >
+                           <li
+                            x-show="key != 'avatar'" 
+                            class="grid grid-cols-[1fr_3fr] gap-x-10 items-center">
+                              <h3 class="text-xl font-bold justify-self-end"
+                                 x-text="key"
+                              ></h3>
+                              <span x-text="item"></span>
+                           </li>
+                        </template>
+                        <li
+                            class="grid grid-cols-[1fr_3fr] gap-x-10 items-center">
+                              <h3 class="text-xl font-bold justify-self-end"
+                              >token</h3>
+                              <span x-text="token"></span>
+                           </li>
+                     </ul>
+                  </div>
+                  
+                  </p>
+                </div>
+            </section>
+        </main>
+        <!-- <footer class="border">
+            sdfsdfas
+        </footer> -->
+    </div>
+
+</body>
+</html>
